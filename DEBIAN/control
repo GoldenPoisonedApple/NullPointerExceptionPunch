@@ -1,6 +1,7 @@
 Package: nullpointerpunch
 Version: 1.0.0
 Section: utils
+Depends: bash, coreutils
 Priority: optional
 Architecture: all
 Maintainer: GoldenPoisonedApple

@@ -20,7 +20,7 @@ deb:
 	mv build/$(PKG).deb $(PKG).deb
 
 install:
-	sudo dpkg -i $(PKG).deb
+	sudo dpkg --install $(PKG).deb
 
 clean:
 	rm -rf build *.deb
