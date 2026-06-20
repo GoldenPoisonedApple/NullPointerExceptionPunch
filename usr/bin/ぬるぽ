@@ -1,0 +1,58 @@
+#!/bin/sh
+
+VERSION="1.0.0"
+
+# ヘルプを表示
+show_help() {
+    cat <<EOF
+Usage: ぬるぽ [OPTION]
+
+Options:
+  --full       フルAAを表示
+  --version    バージョンを表示
+  --help       このヘルプを表示
+
+Examples:
+  ぬるぽ
+  ぬるぽ --full
+EOF
+}
+
+# フルAAを表示
+show_full() {
+  cat <<EOF
+    Λ＿＿Λ      ＼＼
+  ( ・∀ ・)    |  |  ｶﾞｯ
+  と      )     |  |
+  Ｙ  / ノ     人
+      / )      ＜ ＞_  Λ∩
+    /し'    ／／Ｖ｀Д´）/
+  (＿フ彡              /  <- >> $USER
+EOF
+}
+
+# "${変数:-デフォルト値}" 第一引数の値によって処理を分岐する
+case "${1:-}" in
+  # ノーマル
+  "")
+    echo "ｶﾞｯ"
+    ;;
+  # フル
+  --full)
+    show_full
+    ;;
+  # バージョン表記
+  --version)
+    echo "ぬるぽ $VERSION"
+    ;;
+  # help
+  --help|-h)
+    show_help
+    ;;
+  # その他
+  *)
+    echo "ぬるぽ: unknown option: $1" >&2
+    echo "Try 'ぬるぽ --help' for more information." >&2
+    exit 1
+    ;;
+esac
