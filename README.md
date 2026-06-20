@@ -6,21 +6,25 @@
 
 ## クイックインストール（GitHub Release）
 
-Debian / Ubuntu 向け。Release から `.deb` を取得し `apt install` します。
+Debian / Ubuntu 向け。最新版をダウンロードして `apt install` します。
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/GoldenPoisonedApple/NullPointerExceptionPunch/main/scripts/install.sh | sh
+wget -O /tmp/nullpointerpunch.deb \
+  https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest/download/nullpointerpunch_all.deb
+sudo apt install -y /tmp/nullpointerpunch.deb
 ```
 
-特定バージョンを指定する場合:
+`curl` を使う場合:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/GoldenPoisonedApple/NullPointerExceptionPunch/main/scripts/install.sh | sh -s -- 1.0.0
+curl -fsSLO \
+  https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest/download/nullpointerpunch_all.deb
+sudo apt install -y ./nullpointerpunch_all.deb
 ```
 
-## 手動インストール（GitHub Release）
+## バージョン指定インストール
 
-[Releases](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases) から `nullpointerpunch_<version>_all.deb` をダウンロード:
+[Releases](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases) から特定バージョンを取得:
 
 ```sh
 curl -LO https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/download/v1.0.0/nullpointerpunch_1.0.0_all.deb
@@ -80,16 +84,14 @@ man ぬるぽ          # マニュアル
 
 ## Release の出し方（メンテナ向け）
 
-1. `bin/ぬるぽ` の `VERSION` を更新
-2. 変更をコミット
-3. タグを push（`v` プレフィックス必須、VERSION と一致させる）
+[Conventional Commits](https://www.conventionalcommits.org/) 形式で `main` に push すると、[release-please](https://github.com/googleapis/release-please) が Release PR を作成します。
 
-```sh
-git tag v1.0.0
-git push origin v1.0.0
-```
+1. `feat:`, `fix:` などでコミット・push
+2. release-please が `bin/ぬるぽ` の `VERSION` と `CHANGELOG.md` を更新する PR を作成
+3. PR をマージ → タグ `vX.Y.Z` が自動作成
+4. GitHub Actions が `.deb` をビルドし Release に添付
 
-GitHub Actions が `.deb` をビルドし、Release にアセットとして添付します。
+手動でタグを付ける必要はありません。
 
 ## ドキュメント
 

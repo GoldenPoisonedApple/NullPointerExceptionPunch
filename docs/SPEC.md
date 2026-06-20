@@ -30,8 +30,14 @@ NullPointerExceptionPunch/
 ├── man/ぬるぽ.1            # man 原稿（@VERSION@ プレースホルダ）
 ├── DEBIAN/control          # .deb メタデータ（Version はビルド時注入）
 ├── Makefile                # ビルド・インストール・クリーン
-├── scripts/install.sh      # GitHub Release からのリモートインストール
-├── .github/workflows/release.yml
+├── scripts/install.sh      # GitHub Release からのリモートインストール（補助）
+├── .github/
+│   ├── release-please-config.json
+│   └── workflows/
+│       ├── release-please.yml
+│       └── release.yml
+├── .release-please-manifest.json
+├── CHANGELOG.md            # release-please が管理
 ├── docs/SPEC.md            # 本仕様書
 ├── README.md               # 利用者向けクイックスタート
 ├── LICENSE
@@ -143,11 +149,15 @@ Try 'ぬるぽ --help' for more information.
 
 ### 4.2 バージョン更新手順
 
-1. `bin/ぬるぽ` の `VERSION` を変更
-2. `make deb` を実行
-3. `control` と man ページは自動同期
+Conventional Commits 形式で `main` に push すると release-please が Release PR を作成する。
 
-`DEBIAN/control` の `Version:` 行はテンプレートとして残す（手動同期不要だが、値は `bin/ぬるぽ` と一致させておくことが望ましい）。
+1. `feat:`, `fix:` 等でコミット・push
+2. release-please が `bin/ぬるぽ` の `VERSION` と `CHANGELOG.md` を更新する PR を作成
+3. PR マージ → タグ `vX.Y.Z` が自動作成 → CI が `.deb` をビルド
+
+`make deb` 実行時、`control` と man ページは `bin/ぬるぽ` の `VERSION` から自動同期される。
+
+`DEBIAN/control` の `Version:` 行はテンプレートとして残す（手動同期不要）。
 
 ---
 
@@ -240,16 +250,30 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 
 | 項目 | 内容 |
 |------|------|
-| トリガー | `v*` タグの push（例: `v1.0.0`） |
-| CI | `.github/workflows/release.yml` |
-| アセット名 | `nullpointerpunch_<version>_all.deb` |
+| バージョン管理 | release-please（Conventional Commits → Release PR → タグ自動作成） |
+| トリガー | release-please による `v*` タグの push |
+| CI | `.github/workflows/release-please.yml`, `.github/workflows/release.yml` |
+| アセット名 | `nullpointerpunch_<version>_all.deb`（バージョン固定用） |
+| | `nullpointerpunch_all.deb`（latest ダウンロード用・固定名） |
 | タグ検証 | タグ `vX.Y.Z` と `bin/ぬるぽ` の `VERSION` が一致すること |
 
-### 8.2 リモートインストール（`scripts/install.sh`）
+### 8.2 リモートインストール
 
-1. GitHub API から最新 Release の tag を取得（または引数で VERSION 指定）
-2. `https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/download/v<version>/nullpointerpunch_<version>_all.deb` をダウンロード
-3. `sudo apt install -y <deb>` でインストール
+**最新版（推奨）:**
+
+```
+https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest/download/nullpointerpunch_all.deb
+```
+
+`wget` / `curl` でダウンロード後、`sudo apt install -y <deb>` でインストール。
+
+**バージョン指定:**
+
+`https://github.com/.../releases/download/v<version>/nullpointerpunch_<version>_all.deb`
+
+**補助スクリプト（`scripts/install.sh`）:**
+
+上記 URL をラップする。引数省略時は latest、指定時はバージョン固定 URL を使用。
 
 ### 8.3 アンインストール
 

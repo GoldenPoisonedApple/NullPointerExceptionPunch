@@ -27,8 +27,13 @@ jobs:
       - name: Build deb
         run: make deb
 
+      - name: Prepare latest alias
+        run: cp nullpointerpunch_*_all.deb nullpointerpunch_all.deb
+
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
         with:
-          files: nullpointerpunch_*_all.deb
+          files: |
+            nullpointerpunch_*_all.deb
+            nullpointerpunch_all.deb
           generate_release_notes: true
