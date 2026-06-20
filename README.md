@@ -99,4 +99,4 @@ man ぬるぽ          # マニュアル
 
 ## ライセンス
 
-MIT License — 詳細は [LICENSE](LICENSE) を参照。
+MIT License

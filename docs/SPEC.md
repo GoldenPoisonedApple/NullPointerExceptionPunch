@@ -170,7 +170,7 @@ Conventional Commits 形式で `main` に push すると release-please が Rele
 | フィールド | 値 |
 |-----------|-----|
 | Package | `nullpointerpunch` |
-| Version | ビルド時に `bin/ぬるぽ` から注入 |
+| Version | ビルド時に `.release-please-manifest.json` から注入 |
 | Section | `utils` |
 | Priority | `optional` |
 | Architecture | `all` |
@@ -180,7 +180,7 @@ Conventional Commits 形式で `main` に push すると release-please が Rele
 
 | パス | 権限 | 内容 |
 |------|------|------|
-| `/usr/bin/ぬるぽ` | `755` | `bin/ぬるぽ` のコピー |
+| `/usr/bin/ぬるぽ` | `755` | `bin/ぬるぽ` に VERSION を注入して配置 |
 | `/usr/share/man/man1/ぬるぽ.1.gz` | `644` | `man/ぬるぽ.1` を gzip -9 圧縮 |
 
 ### 5.3 未実装・意図的に省略したもの
@@ -296,7 +296,7 @@ https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest
 | 移植性 | POSIX `sh` 互換を維持（bash 固有機能不使用） |
 | セキュリティ | ネットワーク・ファイル書き込み・権限昇格なし |
 | パフォーマンス | 即時終了（外部プロセス起動なし） |
-| テスト | 現状自動テストなし（手動確認: `make deb`, `./bin/ぬるぽ`） |
+| テスト | 現状自動テストなし（手動確認: `make deb`, `sh bin/ぬるぽ`, ビルド後 `sh build/nullpointerpunch/usr/bin/ぬるぽ --version`） |
 
 ---
 
