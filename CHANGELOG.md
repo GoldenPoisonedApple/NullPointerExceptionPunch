@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/compare/v1.2.0...v1.3.0) (2026-06-20)
+
+
+### Features
+
+* update permissions in release-please workflow ([098a403](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/commit/098a4036764a33347ee8675e2d848a4fdb5017fd))
+
 ## [1.2.0](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/compare/v1.1.0...v1.2.0) (2026-06-20)
 
 
