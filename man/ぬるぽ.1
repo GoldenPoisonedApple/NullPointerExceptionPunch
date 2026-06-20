@@ -1,5 +1,5 @@
 .\" TH: ヘッダー
-.TH NULPO 1 "June 2026" "1.0.0" "User Commands"
+.TH "ぬるぽ" 1 "June 2026" "@VERSION@" "User Commands"
 
 .\" SH: セクション
 .\" NAME(必須): コマンド名 \- 説明
@@ -11,7 +11,7 @@
 .\" []: 省略可能 ちなみに {}: 必須
 .SH SYNOPSIS
 .B ぬるぽ
-[\-\-full]
+[\-\-full] [\-\-version] [\-\-help]
 
 .\" DESCRIPTION(必須): 説明
 .SH DESCRIPTION
@@ -34,10 +34,12 @@
 
 .\" 終了コード説明
 .SH EXIT STATUS
+.TP
 .B 0
-ガッ成功
+成功
+.TP
 .B 1
-ガッ失敗
+不明なオプションが指定された
 
 .\" サンプル
 .SH EXAMPLES

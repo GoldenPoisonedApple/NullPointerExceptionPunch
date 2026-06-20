@@ -4,4 +4,7 @@ Section: utils
 Priority: optional
 Architecture: all
 Maintainer: GoldenPoisonedApple
-Description: returns ガッ when invoked with null pointer exception
+Description: terminal command that outputs ガッ
+ A joke CLI tool for when you want the internet in your terminal.
+ .
+ Run 'ぬるぽ' for the classic sound, or 'ぬるぽ --full' for ASCII art.
