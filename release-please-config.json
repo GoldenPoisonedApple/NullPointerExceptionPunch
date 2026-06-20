@@ -4,10 +4,8 @@
     ".": {
       "release-type": "simple",
       "changelog-path": "CHANGELOG.md",
-      "skip-github-release": true,
-      "extra-files": [
-        "bin/ぬるぽ"
-      ]
+      "bump-minor-pre-major": true,
+      "skip-github-release": true
     }
   }
 }

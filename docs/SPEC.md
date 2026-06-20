@@ -26,17 +26,16 @@
 
 ```
 NullPointerExceptionPunch/
-├── bin/ぬるぽ              # コマンド本体（ソース・単一の VERSION 定義源）
+├── bin/ぬるぽ              # コマンド本体（@VERSION@ はビルド時注入）
 ├── man/ぬるぽ.1            # man 原稿（@VERSION@ プレースホルダ）
 ├── DEBIAN/control          # .deb メタデータ（Version はビルド時注入）
 ├── Makefile                # ビルド・インストール・クリーン
 ├── scripts/install.sh      # GitHub Release からのリモートインストール（補助）
-├── .github/
-│   ├── release-please-config.json
-│   └── workflows/
-│       ├── release-please.yml
-│       └── release.yml
-├── .release-please-manifest.json
+├── release-please-config.json
+├── .github/workflows/
+│   ├── release-please.yml
+│   └── release.yml
+├── .release-please-manifest.json  # バージョン定義の唯一の正
 ├── CHANGELOG.md            # release-please が管理
 ├── docs/SPEC.md            # 本仕様書
 ├── README.md               # 利用者向けクイックスタート
@@ -58,8 +57,9 @@ NullPointerExceptionPunch/
 ```mermaid
 flowchart LR
     subgraph source [ソース]
-        BIN["bin/ぬるぽ<br/>VERSION 定義"]
+        BIN["bin/ぬるぽ<br/>@VERSION@"]
         MAN["man/ぬるぽ.1<br/>@VERSION@"]
+        MANIFEST[".release-please-manifest.json<br/>バージョン定義"]
         CTRL["DEBIAN/control<br/>Version プレースホルダ"]
     end
 
@@ -78,6 +78,7 @@ flowchart LR
 
     BIN --> MK
     MAN --> MK
+    MANIFEST --> MK
     CTRL --> MK
     MK --> DEB
     DEB -->|dpkg -i| USRBIN
@@ -138,24 +139,25 @@ Try 'ぬるぽ --help' for more information.
 
 ### 4.1 単一ソース
 
-**`bin/ぬるぽ` 内の `VERSION="x.y.z"` が唯一の正。**  
-他ファイルのバージョンはビルド時に Makefile が注入する。
+**`.release-please-manifest.json` が唯一の正。**  
+`bin/ぬるぽ` と man ページのバージョンはビルド時に Makefile が注入する。
 
 | 反映先 | 方法 |
 |--------|------|
-| `ぬるぽ --version` | スクリプト内 `VERSION` を直接参照 |
+| `ぬるぽ --version` | ビルド時に `bin/ぬるぽ` の `@VERSION@` へ注入 |
 | `DEBIAN/control` | `sed 's/^Version: .*/Version: $(VERSION)/'` |
 | `man/ぬるぽ.1` | `sed 's/@VERSION@/$(VERSION)/'` → gzip |
+| `nullpointerpunch_<version>_all.deb` | manifest のバージョンで命名 |
 
 ### 4.2 バージョン更新手順
 
 Conventional Commits 形式で `main` に push すると release-please が Release PR を作成する。
 
 1. `feat:`, `fix:` 等でコミット・push
-2. release-please が `bin/ぬるぽ` の `VERSION` と `CHANGELOG.md` を更新する PR を作成
+2. release-please が `.release-please-manifest.json` と `CHANGELOG.md` を更新する PR を作成
 3. PR マージ → タグ `vX.Y.Z` が自動作成 → CI が `.deb` をビルド
 
-`make deb` 実行時、`control` と man ページは `bin/ぬるぽ` の `VERSION` から自動同期される。
+`make deb` 実行時、`control`・`bin/ぬるぽ`・man ページは manifest の `VERSION` から自動同期される。
 
 `DEBIAN/control` の `Version:` 行はテンプレートとして残す（手動同期不要）。
 
@@ -224,10 +226,11 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 
 ```
 1. build/nullpointerpunch/{DEBIAN,usr/bin,usr/share/man/man1} を作成
-2. DEBIAN/control に VERSION を注入してステージング
-3. bin/ぬるぽ を usr/bin/ にコピー（chmod 755）
-4. man/ぬるぽ.1 に VERSION を注入 → gzip → usr/share/man/man1/ぬるぽ.1.gz
-5. dpkg-deb --build build/nullpointerpunch nullpointerpunch_<version>_all.deb
+2. `.release-please-manifest.json` から VERSION を取得
+3. DEBIAN/control に VERSION を注入してステージング
+4. bin/ぬるぽ に VERSION を注入 → usr/bin/ に配置（chmod 755）
+5. man/ぬるぽ.1 に VERSION を注入 → gzip → usr/share/man/man1/ぬるぽ.1.gz
+6. dpkg-deb --build build/nullpointerpunch nullpointerpunch_<version>_all.deb
 ```
 
 成果物の命名規則: `nullpointerpunch_<version>_all.deb`（Debian 慣習）
@@ -240,7 +243,7 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 | `dpkg-deb` | `.deb` 生成 |
 | `gzip` | man ページ圧縮 |
 | `sed` | バージョン注入 |
-| `grep`, `cut`, `tr` | VERSION 抽出 |
+| `sed`（manifest 解析） | VERSION 抽出 |
 
 ---
 
@@ -255,7 +258,7 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 | CI | `.github/workflows/release-please.yml`, `.github/workflows/release.yml` |
 | アセット名 | `nullpointerpunch_<version>_all.deb`（バージョン固定用） |
 | | `nullpointerpunch_all.deb`（latest ダウンロード用・固定名） |
-| タグ検証 | タグ `vX.Y.Z` と `bin/ぬるぽ` の `VERSION` が一致すること |
+| タグ検証 | タグ `vX.Y.Z` と `.release-please-manifest.json` のバージョンが一致すること |
 
 ### 8.2 リモートインストール
 

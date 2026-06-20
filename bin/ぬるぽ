@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# パッケージのバージョンを定義
-VERSION="1.0.0"
+# ビルド時に .release-please-manifest.json のバージョンが注入される
+VERSION="@VERSION@"
 
 # ヘルプを表示
 show_help() {

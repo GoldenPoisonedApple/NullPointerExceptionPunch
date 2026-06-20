@@ -18,9 +18,9 @@ jobs:
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
           TAG_VERSION="${TAG#v}"
-          SCRIPT_VERSION=$(grep '^VERSION=' bin/ぬるぽ | cut -d= -f2 | tr -d '"')
-          if [ "$TAG_VERSION" != "$SCRIPT_VERSION" ]; then
-            echo "Tag $TAG does not match bin/ぬるぽ VERSION=$SCRIPT_VERSION"
+          MANIFEST_VERSION=$(sed -n 's/.*"\.\": "\([^"]*\)".*/\1/p' .release-please-manifest.json)
+          if [ "$TAG_VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "Tag $TAG does not match .release-please-manifest.json VERSION=$MANIFEST_VERSION"
             exit 1
           fi
 
