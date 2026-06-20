@@ -33,8 +33,7 @@ NullPointerExceptionPunch/
 ├── scripts/install.sh      # GitHub Release からのリモートインストール（補助）
 ├── release-please-config.json
 ├── .github/workflows/
-│   ├── release-please.yml
-│   └── release.yml
+│   └── release-please.yml  # release-please + .deb ビルド・添付
 ├── .release-please-manifest.json  # バージョン定義の唯一の正
 ├── CHANGELOG.md            # release-please が管理
 ├── docs/SPEC.md            # 本仕様書
@@ -254,11 +253,10 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 | 項目 | 内容 |
 |------|------|
 | バージョン管理 | release-please（Conventional Commits → Release PR → タグ自動作成） |
-| トリガー | release-please による `v*` タグの push |
-| CI | `.github/workflows/release-please.yml`, `.github/workflows/release.yml` |
+| トリガー | Release PR マージ後、`release-please.yml` の `release_created` |
+| CI | `.github/workflows/release-please.yml`（release-please job + release job） |
 | アセット名 | `nullpointerpunch_<version>_all.deb`（バージョン固定用） |
 | | `nullpointerpunch_all.deb`（latest ダウンロード用・固定名） |
-| タグ検証 | タグ `vX.Y.Z` と `.release-please-manifest.json` のバージョンが一致すること |
 
 ### 8.2 リモートインストール
 

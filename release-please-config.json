@@ -5,7 +5,7 @@
       "release-type": "simple",
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": true,
-      "skip-github-release": true
+      "bump-patch-for-minor-pre-major": true
     }
   }
 }
