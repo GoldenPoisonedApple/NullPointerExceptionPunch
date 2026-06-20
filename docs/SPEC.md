@@ -30,6 +30,8 @@ NullPointerExceptionPunch/
 ├── man/ぬるぽ.1            # man 原稿（@VERSION@ プレースホルダ）
 ├── DEBIAN/control          # .deb メタデータ（Version はビルド時注入）
 ├── Makefile                # ビルド・インストール・クリーン
+├── scripts/install.sh      # GitHub Release からのリモートインストール
+├── .github/workflows/release.yml
 ├── docs/SPEC.md            # 本仕様書
 ├── README.md               # 利用者向けクイックスタート
 ├── LICENSE
@@ -60,7 +62,7 @@ flowchart LR
     end
 
     subgraph artifact [成果物]
-        DEB["nullpointerpunch.deb"]
+        DEB["nullpointerpunch_<version>_all.deb"]
     end
 
     subgraph installed [インストール先]
@@ -202,8 +204,10 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 | ターゲット | 動作 |
 |-----------|------|
 | `all` | `deb` のエイリアス |
-| `deb` | `.deb` パッケージを生成 |
-| `install` | `sudo dpkg -i nullpointerpunch.deb` |
+| `deb` | `nullpointerpunch_<version>_all.deb` を生成 |
+| `install` | `deb` ビルド後、`sudo apt install -y ./<deb>` |
+| `uninstall` | `sudo apt remove -y nullpointerpunch` |
+| `purge` | `sudo apt purge -y nullpointerpunch` |
 | `clean` | `build/` と `*.deb` を削除 |
 
 ### 7.2 `deb` ターゲットの処理フロー
@@ -213,9 +217,10 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 2. DEBIAN/control に VERSION を注入してステージング
 3. bin/ぬるぽ を usr/bin/ にコピー（chmod 755）
 4. man/ぬるぽ.1 に VERSION を注入 → gzip → usr/share/man/man1/ぬるぽ.1.gz
-5. dpkg-deb --build build/nullpointerpunch
-6. build/nullpointerpunch.deb をプロジェクトルートの nullpointerpunch.deb に移動
+5. dpkg-deb --build build/nullpointerpunch nullpointerpunch_<version>_all.deb
 ```
+
+成果物の命名規則: `nullpointerpunch_<version>_all.deb`（Debian 慣習）
 
 ### 7.3 ビルド依存
 
@@ -227,8 +232,37 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 | `sed` | バージョン注入 |
 | `grep`, `cut`, `tr` | VERSION 抽出 |
 
+---
 
-## 8. 非機能要件
+## 8. 配布・インストール仕様
+
+### 8.1 GitHub Release
+
+| 項目 | 内容 |
+|------|------|
+| トリガー | `v*` タグの push（例: `v1.0.0`） |
+| CI | `.github/workflows/release.yml` |
+| アセット名 | `nullpointerpunch_<version>_all.deb` |
+| タグ検証 | タグ `vX.Y.Z` と `bin/ぬるぽ` の `VERSION` が一致すること |
+
+### 8.2 リモートインストール（`scripts/install.sh`）
+
+1. GitHub API から最新 Release の tag を取得（または引数で VERSION 指定）
+2. `https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/download/v<version>/nullpointerpunch_<version>_all.deb` をダウンロード
+3. `sudo apt install -y <deb>` でインストール
+
+### 8.3 アンインストール
+
+| 方法 | コマンド |
+|------|---------|
+| Makefile | `make uninstall` / `make purge` |
+| 直接 | `sudo apt remove nullpointerpunch` |
+
+パッケージ削除により `/usr/bin/ぬるぽ` と man ページが除去される。
+
+---
+
+## 9. 非機能要件
 
 | 項目 | 方針 |
 |------|------|
@@ -239,18 +273,19 @@ man 参照名は `.TH "ぬるぽ"` により `man ぬるぽ` で開ける。
 
 ---
 
-## 9. 将来の拡張（スコープ外）
+## 10. 将来の拡張（スコープ外）
 
 以下は現バージョンのスコープ外とする。
 
-- CI（GitHub Actions で `make deb` / shellcheck）
+- 公式 apt リポジトリ（`apt install nullpointerpunch` をパス指定なしで）
+- shellcheck 等の静的解析 CI
 - 複数引数の組み合わせ対応
 - 設定ファイル（`.nulporc` 等）
 - 他 distro 向けパッケージ（RPM 等）
 
 ---
 
-## 10. 用語
+## 11. 用語
 
 | 用語 | 意味 |
 |------|------|
