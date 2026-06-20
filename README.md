@@ -82,17 +82,6 @@ make purge
 man ぬるぽ          # マニュアル
 ```
 
-## Release の出し方（メンテナ向け）
-
-[Conventional Commits](https://www.conventionalcommits.org/) 形式で `main` に push すると、[release-please](https://github.com/googleapis/release-please) が Release PR を作成します。
-
-1. `feat:`, `fix:` などでコミット・push
-2. release-please が `.release-please-manifest.json` と `CHANGELOG.md` を更新する PR を作成
-3. PR をマージ → タグ `vX.Y.Z` が自動作成
-4. GitHub Actions が `.deb` をビルドし Release に添付
-
-手動でタグを付ける必要はありません。
-
 ## ドキュメント
 
 - [仕様書](docs/SPEC.md)
