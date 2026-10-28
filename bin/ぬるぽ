@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# ビルド時に .release-please-manifest.json のバージョンが注入される
+# ビルド時に .release-please-manifest.json のバージョンがmake debにより注入される
 VERSION="@VERSION@"
 
 # ヘルプを表示

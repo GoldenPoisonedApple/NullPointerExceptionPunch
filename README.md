@@ -1,80 +1,10 @@
 # NullPointerExceptionPunch
 
 ターミナルにもインターネッツが欲しい～！
-ということで作りました。
-Release-Please でバージョン管理しています。
 
 `ぬるぽ` を実行すると `ｶﾞｯ` と出力されます。
 
-## クイックインストール（GitHub Release）
-
-Debian / Ubuntu 向け。最新版をダウンロードして `apt install` します。
-
-```sh
-wget -O /tmp/nullpointerpunch.deb \
-  https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest/download/nullpointerpunch_all.deb
-sudo apt install -y /tmp/nullpointerpunch.deb
-```
-
-`curl` を使う場合:
-
-```sh
-curl -fsSLO \
-  https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest/download/nullpointerpunch_all.deb
-sudo apt install -y ./nullpointerpunch_all.deb
-```
-
-## バージョン指定インストール
-
-[Releases](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases) から特定バージョンを取得:
-
-```sh
-curl -LO https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/download/v1.0.0/nullpointerpunch_1.0.0_all.deb
-sudo apt install -y ./nullpointerpunch_1.0.0_all.deb
-```
-
-## ソースからビルド
-
-### 依存
-
-- `dpkg-deb`
-- `gzip`
-
-### ビルド
-
-```sh
-make deb
-```
-
-`nullpointerpunch_<version>_all.deb` が生成されます。
-
-### インストール
-
-```sh
-make install
-```
-
-内部的に `sudo apt install -y ./nullpointerpunch_<version>_all.deb` を実行します。
-
-## アンインストール
-
-```sh
-make uninstall
-```
-
-または:
-
-```sh
-sudo apt remove nullpointerpunch
-```
-
-設定ファイルも含めて完全に削除する場合:
-
-```sh
-make purge
-```
-
-## 使い方
+## Usage
 
 ```sh
 ぬるぽ              # ｶﾞｯ
@@ -84,10 +14,49 @@ make purge
 man ぬるぽ          # マニュアル
 ```
 
-## ドキュメント
+## Description
+- パッケージ名: `nullpointerpunch`、`apt show nullpointerpunch` で確認
+- [ぬるぽ](bin/ぬるぽ): 本体、使用コマンドは `cat`, `echo`, `exit`のみ、/usr/bin/に配置される
+- [DEBIAN/control](DEBIAN/control): deb package 情報
+- [man/ぬるぽ.1](man/ぬるぽ.1): man page
 
-- [仕様書](docs/SPEC.md)
+## Environment
+- Debian系
 
-## ライセンス
+## Installation
+```bash
+curl -fsSL -o /tmp/nullpointerpunch.deb https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/latest/download/nullpointerpunch_all.deb
+sudo apt install -y /tmp/nullpointerpunch.deb
+```
+- バージョン指定の場合
+```bash
+curl -fsSL -o /tmp/nullpointerpunch.deb https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/releases/download/v1.0.0/nullpointerpunch_1.0.0_all.deb
+sudo apt install -y /tmp/nullpointerpunch.deb
+```
+- リポジトリをcloneした場合
+```bash
+# Require: dpkg-deb, gzip
+# build deb package
+make deb
+# install deb package
+make install
+```
 
-MIT License
+## Uninstallation
+```bash
+# uninstall deb package
+sudo apt remove -y nullpointerpunch
+# if you want to remove all config files, run:
+sudo apt purge -y nullpointerpunch
+```
+- リポジトリをcloneした場合
+```bash
+# uninstall deb package
+make uninstall
+# if you want to remove all config files, run:
+make purge
+```
+
+## License
+
+[MIT License](LICENSE)
