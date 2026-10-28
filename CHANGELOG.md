@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/compare/v1.3.0...v1.4.0) (2026-10-28)
+
+
+### Features
+
+* ドキュメント整理 ([d1619ef](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/commit/d1619ef2487291ef674cf0488cea2f698c091eb0))
+
 ## [1.3.0](https://github.com/GoldenPoisonedApple/NullPointerExceptionPunch/compare/v1.2.0...v1.3.0) (2026-06-20)
 
 
